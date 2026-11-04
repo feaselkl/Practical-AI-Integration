@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}New ticket{% endblock %}
+{% block content %}
+<h1>New ticket</h1>
+<form class="card" method="post" action="/tickets/new">
+  <label for="customer_id">Customer</label>
+  <select id="customer_id" name="customer_id">
+    {% for c in customers %}<option value="{{ c.customer_id }}">{{ c.name }}</option>{% endfor %}
+  </select>
+  <label for="subject">Subject</label>
+  <input type="text" id="subject" name="subject" required>
+  <label for="body">Message</label>
+  <textarea id="body" name="body" required></textarea>
+  <p><button>Create ticket</button></p>
+</form>
+{% endblock %}

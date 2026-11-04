@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}Tickets{% endblock %}
+{% block content %}
+<h1>{{ "All" if status == "all" else "Open" }} tickets <span class="muted small">({{ tickets|length }})</span></h1>
+<table>
+  <thead>
+    <tr><th>Ticket</th><th>Subject</th><th>Customer</th><th>Category</th><th>Priority</th><th>Created</th></tr>
+  </thead>
+  <tbody>
+  {% for t in tickets %}
+    <tr>
+      <td><a href="/tickets/{{ t.ticket_id }}">{{ t.ticket_id }}</a></td>
+      <td>
+        <a href="/tickets/{{ t.ticket_id }}">{{ t.subject }}</a>
+        {% if t.ai_summary %}<div class="muted small">{{ t.ai_summary }}</div>{% endif %}
+      </td>
+      <td>{{ t.customer_name }}</td>
+      <td>
+        {% if t.category %}{{ t.category }}
+        {% elif t.ai_category %}<span class="badge suggested" title="AI suggestion, not yet accepted">{{ t.ai_category }}?</span>
+        {% else %}<span class="muted">&mdash;</span>{% endif %}
+      </td>
+      <td>
+        {% if t.priority %}<span class="badge {{ t.priority }}">{{ t.priority }}</span>
+        {% elif t.ai_priority %}<span class="badge suggested" title="AI suggestion, not yet accepted">{{ t.ai_priority }}?</span>
+        {% else %}<span class="muted">&mdash;</span>{% endif %}
+      </td>
+      <td class="small muted">{{ t.created_at.strftime("%b %d %H:%M") }}</td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}Search{% endblock %}
+{% block content %}
+<h1>Search tickets</h1>
+<form class="card" method="get" action="/search">
+  <input type="text" name="q" value="{{ q }}" placeholder="Describe the problem in your own words" autofocus>
+</form>
+
+{% if q %}
+<div class="cols">
+  <div class="card">
+    <h2>Keyword search</h2>
+    {% for r in keyword %}
+      <p><a href="/tickets/{{ r.ticket_id }}">{{ r.ticket_id }}</a> {{ r.subject }}</p>
+    {% else %}
+      <p class="muted">No tickets contain all of those words.</p>
+    {% endfor %}
+  </div>
+  {% if settings.feature_similar_tickets %}
+  <div class="card ai">
+    <h2>Semantic search</h2>
+    {% for r in semantic %}
+      <p><a href="/tickets/{{ r.ticket_id }}">{{ r.ticket_id }}</a> {{ r.subject }} <span class="distance">{{ "%.3f"|format(r.distance) }}</span></p>
+    {% endfor %}
+  </div>
+  {% endif %}
+</div>
+{% endif %}
+{% endblock %}

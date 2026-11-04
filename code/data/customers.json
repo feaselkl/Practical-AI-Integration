@@ -1,0 +1,17 @@
+[
+  {"customer_id": "C001", "name": "Priya Raman", "email": "priya.raman@example.com", "since": "2023-04-11"},
+  {"customer_id": "C002", "name": "Marcus Webb", "email": "marcus.webb@example.com", "since": "2024-08-02"},
+  {"customer_id": "C003", "name": "Elena Sokolova", "email": "elena.s@example.com", "since": "2022-03-19"},
+  {"customer_id": "C004", "name": "Dmitri Hale", "email": "dhale@example.com", "since": "2025-01-27"},
+  {"customer_id": "C005", "name": "Aisha Bello", "email": "aisha.bello@example.com", "since": "2025-06-14"},
+  {"customer_id": "C006", "name": "Tom Okafor", "email": "tom.okafor@example.com", "since": "2024-11-30"},
+  {"customer_id": "C007", "name": "Grace Lindqvist", "email": "grace.l@example.com", "since": "2021-07-08"},
+  {"customer_id": "C008", "name": "Jorge Castillo", "email": "jorge.castillo@example.com", "since": "2025-09-03"},
+  {"customer_id": "C009", "name": "Hannah Moreau", "email": "hannah.moreau@example.com", "since": "2023-12-12"},
+  {"customer_id": "C010", "name": "Sam Whitaker", "email": "sam.whitaker@example.com", "since": "2026-02-21"},
+  {"customer_id": "C011", "name": "Lucía Fernández", "email": "lucia.fernandez@example.com", "since": "2026-05-16"},
+  {"customer_id": "C012", "name": "Ben Adler", "email": "ben.adler@example.com", "since": "2022-10-05"},
+  {"customer_id": "C013", "name": "Mei Tanaka", "email": "mei.tanaka@example.com", "since": "2024-04-23"},
+  {"customer_id": "C014", "name": "Owen Price", "email": "owen.price@example.com", "since": "2025-03-09"},
+  {"customer_id": "C015", "name": "Fatima Noor", "email": "fatima.noor@example.com", "since": "2023-08-30"}
+]

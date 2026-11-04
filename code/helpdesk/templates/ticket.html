@@ -1,0 +1,186 @@
+{% extends "base.html" %}
+{% block title %}{{ ticket.ticket_id }}{% endblock %}
+{% block content %}
+<h1>{{ ticket.ticket_id }}: {{ ticket.subject }}</h1>
+
+<div class="grid">
+  <div>
+    <div class="card">
+      <p class="muted small">From {{ ticket.customer_name }} &lt;{{ ticket.customer_email }}&gt; &middot; {{ ticket.created_at.strftime("%b %d, %Y %H:%M") }} &middot; {{ ticket.status }}</p>
+      <div class="body">{{ ticket.body }}</div>
+      {% if ticket.resolution %}<p><strong>Resolution:</strong> {{ ticket.resolution }}</p>{% endif %}
+      <p>
+        <strong>Category:</strong> {{ ticket.category or "unassigned" }} &middot;
+        <strong>Priority:</strong> {% if ticket.priority %}<span class="badge {{ ticket.priority }}">{{ ticket.priority }}</span>{% else %}unassigned{% endif %}
+      </p>
+    </div>
+
+    {% if settings.feature_triage %}
+    <div class="card ai">
+      <h2>Triage</h2>
+      {% if ticket.ai_category %}
+        {% if ticket.ai_needs_review %}<p class="review">Flagged for human review.</p>{% endif %}
+        <dl>
+          <dt>Summary</dt><dd>{{ ticket.ai_summary }}</dd>
+          <dt>Category</dt><dd>{{ ticket.ai_category }}</dd>
+          <dt>Priority</dt><dd><span class="badge {{ ticket.ai_priority }}">{{ ticket.ai_priority }}</span></dd>
+          <dt>Order</dt><dd>{{ ticket.ai_order_number or "none mentioned" }}{% if order_check %} <span class="review small">{{ order_check }}</span>{% endif %}</dd>
+          <dt>Product</dt><dd>{{ ticket.ai_product or "none mentioned" }}</dd>
+          <dt>Sentiment</dt><dd>{{ ticket.ai_sentiment }}</dd>
+        </dl>
+        <p class="muted small">{{ ticket.ai_model }} &middot; prompt {{ ticket.ai_prompt_version }} &middot; {{ ticket.ai_triaged_at.strftime("%b %d %H:%M:%S") }}</p>
+        <form class="inline" method="post" action="/tickets/{{ ticket.ticket_id }}/accept"><button>Accept suggestion</button></form>
+        <form class="inline" method="post" action="/tickets/{{ ticket.ticket_id }}/triage"><button class="ai-button">Re-run triage</button></form>
+      {% else %}
+        <form method="post" action="/tickets/{{ ticket.ticket_id }}/triage"><button class="ai-button">Triage this ticket</button></form>
+      {% endif %}
+    </div>
+    {% endif %}
+
+    {% if settings.feature_similar_tickets %}
+    <div class="card ai">
+      <h2>Similar tickets</h2>
+      {% if similar_error %}
+        <p class="muted">{{ similar_error }}</p>
+      {% elif not similar %}
+        <p class="muted">No similar tickets found. Has the index been built?</p>
+      {% else %}
+        <table>
+          {% for s in similar %}
+          <tr>
+            <td style="width: 7em"><a href="/tickets/{{ s.ticket_id }}">{{ s.ticket_id }}</a><div class="distance">distance {{ "%.3f"|format(s.distance) }}</div></td>
+            <td><strong>{{ s.subject }}</strong>{% if s.resolution %}<div class="small">{{ s.resolution }}</div>{% endif %}</td>
+          </tr>
+          {% endfor %}
+        </table>
+      {% endif %}
+    </div>
+    {% endif %}
+    {% if settings.feature_draft_reply %}
+    <div class="card ai">
+      <h2>Draft a reply</h2>
+      {% if kb_error %}
+        <p class="muted">{{ kb_error }}</p>
+      {% elif not kb_sources %}
+        <p class="muted">No knowledge base sections found. Has the KB index been built?</p>
+      {% else %}
+        <p class="small muted">Grounded in these knowledge base sections:</p>
+        <ol class="small" id="kb-sources">
+          {% for s in kb_sources %}
+          <li data-n="{{ loop.index }}">{{ s.heading }} <span class="distance">{{ "%.3f"|format(s.distance) }}</span></li>
+          {% endfor %}
+        </ol>
+        <p><button class="ai-button" id="draft-button" type="button">Draft a reply</button> <span class="small muted" id="draft-status"></span></p>
+        <textarea id="draft" placeholder="The draft appears here. Edit it before sending; nothing is sent automatically."></textarea>
+        <script>
+          (() => {
+            const button = document.getElementById("draft-button");
+            const draft = document.getElementById("draft");
+            const status = document.getElementById("draft-status");
+            const sources = document.querySelectorAll("#kb-sources li");
+
+            button.addEventListener("click", () => {
+              draft.value = "";
+              status.textContent = "Drafting…";
+              button.disabled = true;
+              sources.forEach(li => li.classList.remove("cited"));
+
+              const events = new EventSource("/tickets/{{ ticket.ticket_id }}/draft");
+              const finish = message => { events.close(); button.disabled = false; status.textContent = message; };
+
+              events.addEventListener("delta", e => {
+                draft.value += JSON.parse(e.data);
+                draft.scrollTop = draft.scrollHeight;
+              });
+              events.addEventListener("done", e => {
+                const d = JSON.parse(e.data);
+                sources.forEach(li => { if (d.cited.includes(Number(li.dataset.n))) li.classList.add("cited"); });
+                const check = d.invalid.length ? `Cites [${d.invalid}], which were never provided.`
+                  : d.cited.length ? `Cites ${d.cited.map(n => `[${n}]`).join(" ")}.`
+                  : "Cites nothing: the knowledge base doesn't answer this, so the draft doesn't guess.";
+                finish(`${check} ${d.model} · ${d.prompt} · ${d.seconds}s · ${d.input_tokens} in / ${d.output_tokens} out`);
+              });
+              events.addEventListener("failed", e => finish(JSON.parse(e.data)));
+              // Without this, EventSource reconnects on its own and drafts again.
+              events.onerror = () => { if (button.disabled) finish("The connection dropped. Try again."); };
+            });
+          })();
+        </script>
+      {% endif %}
+    </div>
+    {% endif %}
+
+    {% if settings.feature_assistant %}
+    <div class="card ai">
+      <h2>Assistant</h2>
+      {% for turn in conversation %}
+        <p><strong>You:</strong> {{ turn.message }}</p>
+        {% if turn.tool_calls %}
+        <details class="small">
+          <summary>{{ turn.tool_calls|length }} tool call(s)</summary>
+          <ul class="tool-calls">
+            {% for call in turn.tool_calls %}
+            <li><code>{{ call.name }}({{ call.arguments|tojson }})</code><br>
+                <span class="muted">{{ call.result|tojson|truncate(220) }}</span></li>
+            {% endfor %}
+          </ul>
+        </details>
+        {% endif %}
+        <div class="body assistant-reply">{{ turn.reply }}</div>
+      {% else %}
+        <p class="muted small">Ask about this ticket. The assistant can look up this customer's orders and the knowledge base, and can propose a refund for you to approve. It cannot issue one.</p>
+      {% endfor %}
+      <form method="post" action="/tickets/{{ ticket.ticket_id }}/assistant" onsubmit="this.querySelector('button').disabled = true; this.querySelector('button').textContent = 'Working…';">
+        <input type="text" name="message" placeholder="e.g. Where is this order, and what can we do?" required>
+        <p><button class="ai-button">Ask the assistant</button></p>
+      </form>
+      {% if conversation %}
+      <form class="inline" method="post" action="/tickets/{{ ticket.ticket_id }}/assistant/reset"><button class="small">New conversation</button></form>
+      {% endif %}
+    </div>
+    {% endif %}
+
+    {% if refunds %}
+    <div class="card">
+      <h2>Refunds</h2>
+      <table>
+        {% for r in refunds %}
+        <tr>
+          <td><strong>{{ r.refund_id }}</strong><br><span class="small muted">{{ r.order_id }}</span></td>
+          <td>${{ r.amount }}<br><span class="small">{{ r.reason }}</span></td>
+          <td>
+            {% if r.status == "proposed" %}
+              <span class="badge suggested">proposed by the assistant</span>
+              <form class="inline" method="post" action="/refunds/{{ r.refund_id }}/approve"><button>Approve</button></form>
+              <form class="inline" method="post" action="/refunds/{{ r.refund_id }}/reject"><button class="ai-button">Reject</button></form>
+            {% else %}
+              <span class="badge">{{ r.status }}</span>
+            {% endif %}
+          </td>
+        </tr>
+        {% endfor %}
+      </table>
+    </div>
+    {% endif %}
+  </div>
+
+  <div>
+    <div class="card">
+      <h2>Customer</h2>
+      <p>{{ ticket.customer_name }}<br><span class="muted small">Customer since {{ ticket.customer_since }}</span></p>
+    </div>
+    <div class="card">
+      <h2>Orders</h2>
+      {% for o in orders %}
+        <p>
+          <strong>{{ o.order_id }}</strong> &middot; {{ o.status }}<br>
+          <span class="small">{% for i in o["items"] %}{{ i.name }}{% if not loop.last %}, {% endif %}{% endfor %}</span><br>
+          <span class="small muted">${{ o.total }} &middot; placed {{ o.placed_at }} &middot; promised by {{ o.promised_by }}</span>
+        </p>
+      {% else %}
+        <p class="muted">No orders.</p>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+{% endblock %}

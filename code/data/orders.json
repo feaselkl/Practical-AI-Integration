@@ -1,0 +1,46 @@
+[
+  {"order_id": "WW-10449", "customer_id": "C001", "placed_at": "2026-09-08", "status": "delivered", "shipping_method": "bike freight", "carrier": "FreightLine", "tracking_number": "FL88213004", "promised_by": "2026-09-18", "delivered_at": "2026-09-12",
+   "items": [{"sku": "GR2-M", "name": "Gravelista GR2 Gravel Bike, size M", "qty": 1, "price": 1899.00}], "total": 1899.00},
+
+  {"order_id": "WW-10388", "customer_id": "C002", "placed_at": "2026-08-14", "status": "delivered", "shipping_method": "bike freight", "carrier": "FreightLine", "tracking_number": "FL87700219", "promised_by": "2026-08-28", "delivered_at": "2026-08-20",
+   "items": [{"sku": "VCE2-L", "name": "Voltaire City E2 E-Bike, size L", "qty": 1, "price": 2899.00}], "total": 2899.00},
+
+  {"order_id": "WW-10457", "customer_id": "C006", "placed_at": "2026-09-24", "status": "shipped", "shipping_method": "bike freight", "carrier": "FreightLine", "tracking_number": "FL88390417", "promised_by": "2026-10-02", "delivered_at": null,
+   "items": [{"sku": "TH29-L", "name": "Trailhawk 29 Hardtail, size L", "qty": 1, "price": 1249.00}], "total": 1249.00},
+
+  {"order_id": "WW-10462", "customer_id": "C005", "placed_at": "2026-09-29", "status": "delivered", "shipping_method": "standard", "carrier": "ParcelPost", "tracking_number": "PP5520918833", "promised_by": "2026-10-06", "delivered_at": "2026-10-03",
+   "items": [{"sku": "AERO-M", "name": "Aero Lid Helmet, size M", "qty": 1, "price": 129.00}], "total": 129.00},
+
+  {"order_id": "WW-10470", "customer_id": "C008", "placed_at": "2026-10-07", "status": "processing", "shipping_method": "standard", "carrier": null, "tracking_number": null, "promised_by": "2026-10-16", "delivered_at": null,
+   "items": [{"sku": "CLIP-PED", "name": "Summit Clipless Pedals", "qty": 1, "price": 149.00}, {"sku": "SHOE-43", "name": "Summit Road Shoes, EU 43", "qty": 1, "price": 179.00}], "total": 342.17},
+
+  {"order_id": "WW-10433", "customer_id": "C011", "placed_at": "2026-09-27", "status": "delivered", "shipping_method": "bike freight", "carrier": "FreightLine", "tracking_number": "FL88401122", "promised_by": "2026-10-09", "delivered_at": "2026-10-06",
+   "items": [{"sku": "COMET24", "name": "Comet 24 Kids Bike", "qty": 1, "price": 449.00}], "total": 449.00},
+
+  {"order_id": "WW-10421", "customer_id": "C010", "placed_at": "2026-09-15", "status": "delivered", "shipping_method": "standard", "carrier": "ParcelPost", "tracking_number": "PP5519002271", "promised_by": "2026-09-24", "delivered_at": "2026-09-19",
+   "items": [{"sku": "COMMUTE-L", "name": "Commuter MIPS Helmet, size L", "qty": 1, "price": 89.00}], "total": 89.00},
+
+  {"order_id": "WW-10466", "customer_id": "C014", "placed_at": "2026-10-05", "status": "shipped", "shipping_method": "express", "carrier": "ParcelPost", "tracking_number": "PP5521377410", "promised_by": "2026-10-07", "delivered_at": null,
+   "items": [{"sku": "LIGHT-SET", "name": "Beacon 800 Light Set", "qty": 1, "price": 89.00}, {"sku": "LOCK-U", "name": "Bastion U-Lock", "qty": 1, "price": 65.00}], "total": 173.00},
+
+  {"order_id": "WW-10402", "customer_id": "C003", "placed_at": "2026-08-30", "status": "delivered", "shipping_method": "standard", "carrier": "ParcelPost", "tracking_number": "PP5518220064", "promised_by": "2026-09-08", "delivered_at": "2026-09-04",
+   "items": [{"sku": "WHL-700-R", "name": "Apex 700c Rear Wheel", "qty": 1, "price": 289.00}], "total": 289.00},
+
+  {"order_id": "WW-10415", "customer_id": "C009", "placed_at": "2026-09-10", "status": "returned", "shipping_method": "standard", "carrier": "ParcelPost", "tracking_number": "PP5518876512", "promised_by": "2026-09-19", "delivered_at": "2026-09-15",
+   "items": [{"sku": "JERSEY-S", "name": "Breakaway Jersey, size S", "qty": 2, "price": 69.00}], "total": 138.00},
+
+  {"order_id": "WW-10394", "customer_id": "C012", "placed_at": "2026-08-18", "status": "delivered", "shipping_method": "bike freight", "carrier": "FreightLine", "tracking_number": "FL87790553", "promised_by": "2026-09-01", "delivered_at": "2026-08-27",
+   "items": [{"sku": "VTR-E3-M", "name": "Voltaire Trail E3 E-Bike, size M", "qty": 1, "price": 3999.00}], "total": 3999.00},
+
+  {"order_id": "WW-10441", "customer_id": "C013", "placed_at": "2026-09-19", "status": "delivered", "shipping_method": "standard", "carrier": "ParcelPost", "tracking_number": "PP5519330981", "promised_by": "2026-09-29", "delivered_at": "2026-09-25",
+   "items": [{"sku": "TIRE-GRV-40", "name": "Gravelista 700x40 Tire", "qty": 2, "price": 58.00}, {"sku": "TUBE-700", "name": "700c Tube", "qty": 2, "price": 9.00}], "total": 134.00},
+
+  {"order_id": "WW-10451", "customer_id": "C015", "placed_at": "2026-09-26", "status": "delivered", "shipping_method": "standard", "carrier": "ParcelPost", "tracking_number": "PP5520114732", "promised_by": "2026-10-05", "delivered_at": "2026-10-01",
+   "items": [{"sku": "RACK-R", "name": "Porter Rear Rack", "qty": 1, "price": 79.00}], "total": 79.00},
+
+  {"order_id": "WW-10472", "customer_id": "C007", "placed_at": "2026-10-08", "status": "received", "shipping_method": "standard", "carrier": null, "tracking_number": null, "promised_by": "2026-10-19", "delivered_at": null,
+   "items": [{"sku": "BOTTLE-2", "name": "Insulated Bottle, 2-pack", "qty": 1, "price": 32.00}], "total": 40.00},
+
+  {"order_id": "WW-10426", "customer_id": "C004", "placed_at": "2026-09-16", "status": "delivered", "shipping_method": "bike freight", "carrier": "FreightLine", "tracking_number": "FL88001876", "promised_by": "2026-09-30", "delivered_at": "2026-09-23",
+   "items": [{"sku": "ROAD-SL-56", "name": "Sprint SL Road Bike, 56cm", "qty": 1, "price": 2399.00}], "total": 2399.00}
+]

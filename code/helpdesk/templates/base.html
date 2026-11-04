@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Help Desk{% endblock %} | Wobbly Wheel Cycles</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <header>
+    <a class="brand" href="/">Wobbly Wheel Cycles &middot; Help Desk</a>
+    <a href="/">Open tickets</a>
+    <a href="/?status=all">All tickets</a>
+    <a href="/search">Search</a>
+    <a href="/tickets/new">New ticket</a>
+  </header>
+  <main>
+    {% if msg %}<div class="flash ok">{{ msg }}</div>{% endif %}
+    {% if err %}<div class="flash err">{{ err }}</div>{% endif %}
+    {% block content %}{% endblock %}
+  </main>
+  <footer>
+    {{ ai_backend }} &middot;
+    triage {{ "on" if settings.feature_triage else "off" }} &middot;
+    similar tickets {{ "on" if settings.feature_similar_tickets else "off" }} &middot;
+    draft a reply {{ "on" if settings.feature_draft_reply else "off" }} &middot;
+    assistant {{ "on" if settings.feature_assistant else "off" }}
+  </footer>
+</body>
+</html>
